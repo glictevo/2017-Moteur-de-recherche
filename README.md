@@ -21,7 +21,7 @@ Je me suis aussi chargé de créé un graphe des liens visité avec dot.
         * sudo make
         * sudo make install
 
-* licburl :
+* libcurl :
 
     * Entrer les commandes :
 
