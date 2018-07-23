@@ -1,0 +1,102 @@
+Semaine 1 :
+  Cette semaine :
+    Bonne compréhension du sujet
+    Choix des extensions :
+      - Tolérance aux pages malformées
+      - Affichage du graphe réseau
+      - Recherche d'entrées proches
+      - Page rank
+    Répartition des taches :
+      Timon : query engine, gestion de l'index
+      Guillaume L : crawler
+      Guillaume M : le parser
+
+  Objectif pour la semaine 2 :
+    Avoir une compréhension du projet et des extensions choisies, ainsi que des idées d'implémentation pour chaque partie.
+    Avoir une architecture globale pour chaque partie (fonctions utilisées).
+    Se renseigner sur les différents modules/bibliothèques indiquées dans le sujet.
+    Concevoir l'index (choix des informations à stocker).
+    Comment sont transmises les données entre les différentes parties du programme (Parser, crawler, index, etc).
+
+Semaine 2 :
+ Cette semaine :
+    Decision sur le format de l'index. Il sera sous la forme d'un fichier .csv. La premiere colonne est reservee a un mot, suivi
+des url renvoyees pour ce mot par le crawler. Plus tard, ces url pourront chacunes etre suivies par un score de page rank, leur checksum...
+    Pour le moment, nous avons identifie plusieurs fonctions utilisees pour manipuler l'index : une fonction pour ajouter une url, une fonction
+pour ajouter un mot, une fonction pour supprimer une url, une fonction pour supprimer un mot (et les url associees), une fonction qui renvoie les url
+associees a un mot.
+    Nous avons egalement parcouru certaines documentation (beautifulsoup, entre autres).
+    Nous avons egalement identifie les differents gros modules de notre projet, et les liens entre eux. Ce modele suit de tres pres l'organisation
+donnee par le sujet, c'est-a-dire une separation entre crawler, parser, index et gestionnaire de reauetes. Le gestionnaire est un programme a part,
+le crawler et le parser en forment un autre, et les fonctions d'index sont une bibliothèque exploitée par les deux programmes. Le crawler et le
+parser interagissent le moins possible : le crawler appellera une fonction du parser qui prend en entree une page HTML (le format de cette
+donnee reste a preciser) et renvoie un tableau de mots avec les tableaux de liens associes. L'index est quant a lui manipule par le crawler et
+le query engine (QE), via les fonctions definies plus haut.
+
+Semaine 3 :
+
+  Test de Cython pour compiler du code python en c. Non concluant. Beautifulsoup est mis de coté. On va utiliser libxml2 comme parser, car il est pratique d'utilisation, et efficace.
+  Ajout du morceau de code permettant de récupérer une page web à partir de son url avec libcurl. Renseignements sur comment faire et enregistrer les graphes.
+
+  A faire pour la semaine 4 :
+    -Parser fonctionnel
+    -Index utilisable (fonctions)
+    -Gérer la création du graphe
+
+Semaine 4 :
+	L'index a pris du retard, car il a fallu revoir l'organisation du query engine (QE). Ce travail sur la spécification de la partie index/QE se trouve dans le fichier index_QE/spec.txt
+	Les fonctions de l'index n'ont plus qu'à être implémentées, le détail de leur fonctionnement est déjà explicité dans le fichier index.c
+	Le fichier query_engine_serv est vide pour le moment, car non nécessaire aux autres parties du projet.
+
+
+Problème avec le parser avec libxml. Je ne trouve pas de moyen de récupérer les URL. Je pense repartir vers beautifulsoup car plus facile d'utilisation, reste juste à trouver un moyen
+d'utilisation du code python dans le programme. (Appeler un script sur un fichier et créer un autre fichier qui contiendra la liste des mots et des URL est la première idée qui vient à l'esprit).
+Problème résolu, fonction xmlGetProp trouvée dans les tréfonds de la documentation.
+
+Semaine 9 :
+
+  Problème avec libcurl, les addresses en https ne fonctionnent pas, cela vient de l'installation de libcurl avec ssl (openssl) apparemment...
+  Beaucoup de recherches sur comment installer correctement libcurl afin d'avoir le protocole https reconnu, mais échecs à chaque fois
+  On essaiera d'installer correctement libcurl avec ce protocole, cependant cela n'empêche pas de continuer d'écrire le programme, et comme on bloque dessus, autant continuer de coder
+
+  Le problème avec libcurl a été réglé, problème en installant depuis la source, mieux vaut utiliser apt-get install avec les bons paquets plutôt que de le faire en manuel depuis la source
+
+  A faire pour la semaine 10 :
+    - Faire en sorte que le crawler interagisse avec le parser et mette à jour l'index (ou au moins appelle les fonction comme il devrait le faire dans son fonctionnement normal)
+    -
+
+Semaine 10 :
+
+  Pendant l'essai du crawler pour tester la fonctionnement avec le parser et la bonne gestion
+  de la profondeur de visite pour les liens, on a remarquer que certains liens peuvent être
+  de la forme "/contact", à comprendre "domaine.com/contact", il faudra donc que l'on prenne
+  en compte ce genre d'url qu'on récupère d'une page.
+
+  Le crawler fonctionne maintenant avec l'index.
+  Cependant certains mots provenant du parser contiennent des caractères d'espacement pouvant mener à une mauvaise
+  écriture dans le fichier de l'index, créant alors une erreur lors de sa lecture lors de sa récupération dans le programme
+  Cette erreur sera simple à corriger, nous avons plusieurs solutions pour régler cela, il faut juste se décider de laquelle utiliser
+
+  Nouveau problème rencontré :
+    Il semblerait qu'il faille utiliser file://*le chemin depuis /* pour chercher un fichier en local avec libcurl
+    Sauf que lorsqu'on récupère un lien dans un document HTML, il n'a pas forcément le chemin complet
+    Cela rejoint en quelque sorte le problème recontré dans le premier paragraphe de la semaine 10
+    Il faudrait donc regarder le début de l'URL, si elle ne commence pas par http:// ou https:// ou autre, alors il faudra modifier l'URL de façon à écrire la bonne pour libcurl
+
+Semaine 11 :
+
+  Les problèmes évoqués lors de la semaine précédente sont réglé.
+  Pour ce qui est des urls, il existe peut-être d'autres qui peuvent créé des erreurs, nous verrons ça au fur et à mesure de nos tests
+  Pour ce qui est des mots du parser contenant des caractères d'espacements, le problème du \n a été réglé, Guillaume M. travaille
+  sur la résolution pour tous les caractères non alphanumériques
+
+Semaine 12 :
+
+  Nous avions un problème avec l'index, lorsque nous ajoutions plus de deux liens pour un certain mot, seul le tout premier et le tout dernier lien restaient dans l'index
+  Après quelques recherches, nous avons réussi à trouver le problème, il venait d'un comportement de la fonction strtok que nous ignorions.
+
+Semaine 13 :
+
+  L'implémentation du graph est terminée,
+  le programme créé un fichier dot contenant la description du graph,
+  il lance ensuite une commande créant le fichier graph.png avec le graph
