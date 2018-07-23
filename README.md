@@ -23,14 +23,22 @@ Je me suis aussi chargé de créé un graphe des liens visité avec dot.
 
 * licburl :
 
-    * Entrer les commandes (on peut avoir besoin d'être en admin) :
+    * Entrer les commandes :
 
-        * apt-get install libcurl4-openss1-dev
+        * sudo apt-get install libcurl4-openssl-dev
         * sudo apt-get install curl
 
 * libxml :
 
     * Lancer la commande : sudo apt-get install libxml2-dev libxml2-doc
+
+* glib :
+
+    * Lancer la commande : sudo apt-get install libglib2.0-dev
+
+* Dot :
+
+    * Lancer la commande : sudo apt-get install graphviz
 
 ## Exécution
 
@@ -46,6 +54,14 @@ Je me suis aussi chargé de créé un graphe des liens visité avec dot.
 
     * echo "}" >> index.csv
     * dot -Tpng -o graphe.png graph.dot
+
+## Instructions
+
+* Lancez tout d'abord la commande pour le crawler, ex : ./crawler 1 https://ubuntu-fr.org/
+
+* Vous pouvez maintenant faire des recherche avec le query_engine : ./quey_engine
+
+* Lisez la section précédente pour plus d'instructions
 
 ## Spécifications
 
@@ -88,3 +104,9 @@ Je me suis aussi chargé de créé un graphe des liens visité avec dot.
 ## Journal
 
 Le journal de l'avancement du projet au long du semestre est disponible : Journal.txt
+
+## Notes
+
+Le projet est parfois bancal.
+Il est parfois nécessaire de devoir supprimer l'intégralité du fichier index.csv avant de relancer le crawler sous peine de segfault.
+Si on laisse tourner le projet plusieurs heures, il finira par occuper toute la RAM et crasher (la liste des liens s'allongeant de plus en plus, on veut éviter de retourner sur des pages déjà visitées, mais on les garde en mémoire plutôt que de les écrire dans un fichier)

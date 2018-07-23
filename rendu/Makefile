@@ -4,7 +4,7 @@ QUERY_ENGINE = query_engine
 CC = gcc
 CFLAGS =  -I../parser
 LIBCURL_FLAGS = $$(pkg-config --libs --cflags libcurl)
-LIBXML2_FLAGS = -I/usr/libxml -lxml2
+LIBXML2_FLAGS = -I/usr/include/libxml2 -lxml2
 GLIB2_FLAGS = -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 GLIB2_FLAGS2 = -lglib-2.0
 PCRE_FLAGS = -I/usr/include/pcre -lpcre
@@ -16,7 +16,7 @@ OBJ_QE = $(SRC_QE:.c=.o)
 all: $(CRAWLER) $(QUERY_ENGINE)
 
 $(CRAWLER):
-	$(CC) -c $(CFLAGS) $(GLIB2_FLAGS) $(SRC)
+	$(CC) -c $(CFLAGS) $(LIBXML2_FLAGS) $(GLIB2_FLAGS) $(SRC)
 	$(CC) $(OBJ) $(GLIB2_FLAGS2) $(PCRE_FLAGS) $(LIBXML2_FLAGS) $(LIBCURL_FLAGS) -o $(CRAWLER)
 	#$(CC) $(CFLAGS) $(SRC) $(GLIB2_FLAGS) $(LIBXML2_FLAGS) $(LIBCURL_FLAGS) -o $(NAME)
 

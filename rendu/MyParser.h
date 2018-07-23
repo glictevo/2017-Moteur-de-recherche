@@ -1,7 +1,7 @@
 #include <stdio.h>
+#include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <string.h>
-#include <libxml/tree.h>
 #include <pcre.h>
 
 struct values values;
